@@ -44,6 +44,9 @@ class MainActivity : ComponentActivity() {
                     var factorNumber by remember {
                         mutableStateOf(0L)
                     }
+                    var errorMessage by remember {
+                        mutableStateOf("Enter a number to factorize")
+                    }
                     // Greeting("Android")
                     Column {
                         Button(
@@ -81,10 +84,14 @@ class MainActivity : ComponentActivity() {
 
                             onValueChange = {
                                 try {
-                                    if (it.isNotEmpty())
+                                    if (it.isNotEmpty()) {
                                         factorNumber = it.toLong()
-                                    else
+                                        errorMessage = ""
+                                    }
+                                    else {
                                         factorNumber = 0
+                                        errorMessage = "Enter a valid number"
+                                    }
                                     factorNumberString = it
                                 } catch (e: NumberFormatException) {
                                      //no change - no updates.
@@ -93,7 +100,9 @@ class MainActivity : ComponentActivity() {
                             readOnly = false,
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
                         )
-
+                        Text (text = errorMessage,
+                            color = Color.Red,
+                            modifier = Modifier.padding(5.dp))
                         ShowPrimeFactors(resultFactors)
                     }
                 }
@@ -114,7 +123,8 @@ fun ShowPrimeFactors(list: MutableList<Long> = mutableListOf())
             Row()
             {
                 Text(
-                    text = number.toString()
+                    text = number.toString(), fontSize = 20.sp,
+                    modifier = Modifier.padding(6.dp)
                 )
             }
         }
